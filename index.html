@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <canvas id="canvas" width="500" height="500" style="background-color: black; border: 3px solid green"></canvas>
+    <hr />
+    <input type="number" id="angle" placeholder="Angle">
+    <input type="number" id="length" placeholder="Branch length">
+    <input type="number" id="width" placeholder="Branch width">
+    <button onclick="clearCanvas()">Clear</button>
+    <button onclick="draw()">Draw</button>
+    <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    function draw() {
+        ctx.strokeStyle = "green";
+        this.drawRecursive(250, 500, document.getElementById("length").value, parseInt(document.getElementById("angle").value), document.getElementById("width").value);
+    }  
+    function drawRecursive(posX, posY, length, angle, width) {
+        ctx.lineWidth = width;
+
+        ctx.beginPath();
+        ctx.save();
+
+        ctx.translate(posX, posY);
+        ctx.rotate(angle * Math.PI / 180);
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -length);
+        ctx.stroke();
+
+        if(length < 15) {
+            ctx.restore();
+            return;
+        }
+
+        drawRecursive(0, -length, length * 0.8, angle - 10, width * 0.8);
+        drawRecursive(0, -length, length * 0.8, angle + 10, width * 0.8);
+
+        ctx.restore();
+    }     
+    function clearCanvas(){
+        ctx.clearRect(0, 0, 500, 500);
+    }
+    </script>
+</body>
+</html>
